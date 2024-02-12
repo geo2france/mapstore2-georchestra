@@ -93,22 +93,22 @@ jobs:
         docker build . -t ghcr.io/geo2france/mapstore2-georchestra:${{ steps.version.outputs.VERSION }}
         # mvn -B package dockerfile:build -Pdocker,log4j-logstash,sentry-log4j -DdockerImageName=georchestra/mapstore:${{ steps.version.outputs.VERSION }} -settings settings.xml
       working-directory: ${{ github.workspace }}
-    - name: "Logging in docker.io"
+    - name: Login to GitHub Container Registry
       if: github.repository == 'geo2france/mapstore2-georchestra' && github.event_name == 'push'
-      uses: azure/docker-login@v1
+      uses: docker/login-action@v1
       with:
         registry: ghcr.io
-        username: ${{github.actor}}
-        password: ${{secrets.GITHUB_TOKEN}}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: "Pushing 2023.02.xx-custom to docker.io"
+    - name: "Pushing 2023.02.xx-custom to registry"
       if: github.ref == 'refs/heads/2023.02.xx-custom' && github.repository == 'geo2france/mapstore2-georchestra' && github.event_name == 'push'
       run: |
-        docker tag ghcr.io/geo2france/mapstore2-georchestra:${{ steps.version.outputs.VERSION }} ghcr.io/geo2france/mapstore2-georchestra:2023.02.xx-custom
-        docker push ghcr.io/geo2france/mapstore2-georchestra:2023.02.xx-custom
+        docker tag ghcr.io/geo2france/mapstore2-georchestra/mapstore:${{ steps.version.outputs.VERSION }} ghcr.io/geo2france/mapstore2-georchestra/mapstore:2023.02.xx-custom
+        docker push ghcr.io/geo2france/mapstore2-georchestra/mapstore:2023.02.xx-custom
       working-directory: ${{ github.workspace }}
 
-    - name: "Pushing tag to docker.io"
+    - name: "Pushing tag to registry"
       if: contains(github.ref, 'refs/tags/') && github.repository == 'geo2france/mapstore2-georchestra' && github.event_name == 'push'
       run: |
-        docker push ghcr.io/geo2france/mapstore2-georchestra:${{ steps.version.outputs.VERSION }}
+        docker push ghcr.io/geo2france/mapstore2-georchestra/mapstore:${{ steps.version.outputs.VERSION }}
