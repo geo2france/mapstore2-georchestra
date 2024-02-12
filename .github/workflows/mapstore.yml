@@ -102,7 +102,7 @@ jobs:
         password: ${{secrets.GITHUB_TOKEN}}
 
     - name: "Pushing 2023.02.xx-custom to docker.io"
-      if: github.ref == '2023.02.xx-custom' && github.repository == 'geo2france/mapstore2-georchestra' && github.event_name == 'push'
+      if: github.ref == 'refs/heads/2023.02.xx-custom' && github.repository == 'geo2france/mapstore2-georchestra' && github.event_name == 'push'
       run: |
         docker tag ghcr.io/geo2france/mapstore2-georchestra:${{ steps.version.outputs.VERSION }} ghcr.io/geo2france/mapstore2-georchestra:2023.02.xx-custom
         docker push ghcr.io/geo2france/mapstore2-georchestra:2023.02.xx-custom
