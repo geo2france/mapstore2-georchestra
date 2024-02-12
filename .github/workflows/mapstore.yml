@@ -90,8 +90,7 @@ jobs:
       if: github.repository == 'geo2france/mapstore2-georchestra'
       run: |
         cp scratch/mapstore-${{ github.sha }}.war docker/MapStore-${{ steps.version.outputs.VERSION }}.war
-        docker build . -t ghcr.io/geo2france/mapstore2-georchestra:${{ steps.version.outputs.VERSION }}
-        # mvn -B package dockerfile:build -Pdocker,log4j-logstash,sentry-log4j -DdockerImageName=georchestra/mapstore:${{ steps.version.outputs.VERSION }} -settings settings.xml
+        docker build . -t ghcr.io/geo2france/mapstore2-georchestra/mapstore:${{ steps.version.outputs.VERSION }}
       working-directory: ${{ github.workspace }}
     - name: Login to GitHub Container Registry
       if: github.repository == 'geo2france/mapstore2-georchestra' && github.event_name == 'push'
