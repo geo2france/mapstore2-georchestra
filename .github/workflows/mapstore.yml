@@ -90,7 +90,7 @@ jobs:
       if: github.repository == 'geo2france/mapstore2-georchestra'
       run: |
         cp scratch/mapstore-${{ github.sha }}.war docker/MapStore-${{ steps.version.outputs.VERSION }}.war
-        docker build . -t ghcr.io/geo2france/mapstore2-georchestra/mapstore:${{ steps.version.outputs.VERSION }}
+        docker build . -t ghcr.io/geo2france/mapstore2-georchestra/mapstore:${{ steps.version.outputs.VERSION }}-prod
       working-directory: ${{ github.workspace }}
     - name: Login to GitHub Container Registry
       if: github.repository == 'geo2france/mapstore2-georchestra' && github.event_name == 'push'
@@ -100,14 +100,14 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: "Pushing 2023.02.xx-custom to registry"
-      if: github.ref == 'refs/heads/2023.02.xx-custom' && github.repository == 'geo2france/mapstore2-georchestra' && github.event_name == 'push'
+    - name: "Pushing 2023.02.xx-custom-prod to registry"
+      if: github.ref == 'refs/heads/2023.02.xx-custom-prod' && github.repository == 'geo2france/mapstore2-georchestra' && github.event_name == 'push'
       run: |
-        docker tag ghcr.io/geo2france/mapstore2-georchestra/mapstore:${{ steps.version.outputs.VERSION }} ghcr.io/geo2france/mapstore2-georchestra/mapstore:2023.02.xx-custom
-        docker push ghcr.io/geo2france/mapstore2-georchestra/mapstore:2023.02.xx-custom
+        docker tag ghcr.io/geo2france/mapstore2-georchestra/mapstore:${{ steps.version.outputs.VERSION }}-prod ghcr.io/geo2france/mapstore2-georchestra/mapstore:2023.02.xx-custom-prod
+        docker push ghcr.io/geo2france/mapstore2-georchestra/mapstore:2023.02.xx-custom-prod
       working-directory: ${{ github.workspace }}
 
     - name: "Pushing tag to registry"
       if: contains(github.ref, 'refs/tags/') && github.repository == 'geo2france/mapstore2-georchestra' && github.event_name == 'push'
       run: |
-        docker push ghcr.io/geo2france/mapstore2-georchestra/mapstore:${{ steps.version.outputs.VERSION }}
+        docker push ghcr.io/geo2france/mapstore2-georchestra/mapstore:${{ steps.version.outputs.VERSION }}-prod
