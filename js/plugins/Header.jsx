@@ -8,9 +8,14 @@
 import {useEffect} from "react";
 import { createPlugin, connect } from "@mapstore/utils/PluginsUtils";
 
-export const Header = ({url = "/header/", page = "mapstore", height = 90, ignoreIFrame = false}) => {
+export const Header = ({url = "/header/", page = "mapstore", height = 90, ignoreIFrame = false,
+    script = "https://cdn.jsdelivr.net/gh/georchestra/header@dist/header.js",
+    legacy = false,
+    logoUrl = "https://www.georchestra.org/public/georchestra-logo.svg",
+    stylesheet = ""}) => {
     useEffect(() => {
         const header = document.getElementById("georchestra-header");
+        const headerScript = document.getElementById("georchestra-header-script");
         const container = document.getElementById("container");
         if (header) {
             if (!ignoreIFrame && window.location !== window.parent.location) {
@@ -19,9 +24,13 @@ export const Header = ({url = "/header/", page = "mapstore", height = 90, ignore
                     container.style.top = '0';
                 }
             } else {
-                header.style.display = 'block';
-                header.src = url + "?active=" + page;
-                header.style.height = height + "px";
+                header.setAttribute("active-app", page);
+                header.setAttribute("legacy-url", url);
+                header.setAttribute("legacy-header", legacy);
+                header.setAttribute("style", `height:${height}px`);
+                header.setAttribute("logo-url", logoUrl);
+                header.setAttribute("stylesheet", stylesheet);
+                headerScript.src = script;
 
                 if (container) {
                     container.style.top = height + "px";
@@ -36,6 +45,10 @@ export const Header = ({url = "/header/", page = "mapstore", height = 90, ignore
 export default createPlugin('Header', {
     component: connect((state) => ({
         url: state.localConfig && state.localConfig.header && state.localConfig.header.url,
-        height: state.localConfig && state.localConfig.header && state.localConfig.header.height
+        height: state.localConfig && state.localConfig.header && state.localConfig.header.height,
+        script: state.localConfig && state.localConfig.header && state.localConfig.header.script,
+        legacy: state.localConfig && state.localConfig.header && state.localConfig.header.legacy,
+        logoUrl: state.localConfig && state.localConfig.header && state.localConfig.header.logoUrl,
+        stylesheet: state.localConfig && state.localConfig.header && state.localConfig.header.stylesheet
     }))(Header)
 });
