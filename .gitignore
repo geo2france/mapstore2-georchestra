@@ -19,3 +19,4 @@ package-lock.json
 *.iml
 .nvmrc
 docker/*.war
+Mapstore2/java/web/overlays/
